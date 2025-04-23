@@ -1,0 +1,54 @@
+name: .NET Release Build
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*.*.*' # Trigger on version tags like v1.0.0
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x # Use the .NET version your project targets
+
+    - name: Restore dependencies
+      run: dotnet restore SimpleNotepad.sln
+
+    - name: Build
+      run: dotnet build SimpleNotepad.sln --configuration Release --no-restore
+
+    - name: Publish
+      # Publishes the application for a specific runtime (win-x64)
+      # Adjust the --runtime if your target is different (e.g., win-x86)
+      run: dotnet publish SimpleNotepad/SimpleNotepad.csproj --configuration Release --runtime win-x64 --output ./publish --no-build
+
+    - name: Archive release artifacts
+      # Creates a zip file containing the published application
+      run: Compress-Archive -Path ./publish/* -DestinationPath SimpleNotepad-Release.zip
+
+    - name: Upload build artifact
+      # Uploads the zip file as an artifact accessible from the workflow run
+      uses: actions/upload-artifact@v4
+      with:
+        name: SimpleNotepad-Release
+        path: SimpleNotepad-Release.zip
+
+    - name: Create Release and Upload Asset
+      # This step only runs if the trigger was a tag push
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: SimpleNotepad-Release.zip
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
