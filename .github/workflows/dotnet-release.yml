@@ -22,7 +22,8 @@ jobs:
         dotnet-version: 8.0.x # Use the .NET version your project targets
 
     - name: Restore dependencies
-      run: dotnet restore SimpleNotepad.sln
+      # Add runtime identifier to restore step
+      run: dotnet restore SimpleNotepad.sln --runtime win-x64
 
     - name: Build
       run: dotnet build SimpleNotepad.sln --configuration Release --no-restore
