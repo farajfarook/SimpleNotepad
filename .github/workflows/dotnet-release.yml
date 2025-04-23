@@ -30,7 +30,8 @@ jobs:
     - name: Publish
       # Publishes the application for a specific runtime (win-x64)
       # Adjust the --runtime if your target is different (e.g., win-x86)
-      run: dotnet publish SimpleNotepad/SimpleNotepad.csproj --configuration Release --runtime win-x64 --output ./publish --no-build
+      # Corrected path to SimpleNotepad.csproj
+      run: dotnet publish SimpleNotepad.csproj --configuration Release --runtime win-x64 --output ./publish --no-build
 
     - name: Archive release artifacts
       # Creates a zip file containing the published application
