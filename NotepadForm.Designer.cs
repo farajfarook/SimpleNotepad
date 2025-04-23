@@ -1,6 +1,6 @@
 ﻿namespace SimpleNotepad;
 
-partial class Form1
+partial class NotepadForm
 {
     /// <summary>
     ///  Required designer variable.
@@ -45,9 +45,9 @@ partial class Form1
         this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
         this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.mainTextBox = new System.Windows.Forms.TextBox();
-        this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-        this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+        this.contentTextBox = new System.Windows.Forms.TextBox();
+        this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+        this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
         this.menuStrip1.SuspendLayout();
         this.SuspendLayout();
         //
@@ -176,38 +176,38 @@ partial class Form1
         this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
         this.selectAllToolStripMenuItem.Text = "Select &All";
         //
-        // mainTextBox
+        // contentTextBox
         //
-        this.mainTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.mainTextBox.Location = new System.Drawing.Point(0, 24);
-        this.mainTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2); // Use Margin consistent with project settings
-        this.mainTextBox.Multiline = true;
-        this.mainTextBox.Name = "mainTextBox";
-        this.mainTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-        this.mainTextBox.Size = new System.Drawing.Size(784, 537);
-        this.mainTextBox.TabIndex = 1;
-        this.mainTextBox.WordWrap = false;
+        this.contentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.contentTextBox.Location = new System.Drawing.Point(0, 24);
+        this.contentTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2); // Use Margin consistent with project settings
+        this.contentTextBox.Multiline = true;
+        this.contentTextBox.Name = "contentTextBox";
+        this.contentTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+        this.contentTextBox.Size = new System.Drawing.Size(784, 537);
+        this.contentTextBox.TabIndex = 1;
+        this.contentTextBox.WordWrap = false;
         //
-        // openFileDialog1
+        // openFileDialog
         //
-        this.openFileDialog1.DefaultExt = "txt";
-        this.openFileDialog1.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+        this.openFileDialog.DefaultExt = "txt";
+        this.openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
         //
-        // saveFileDialog1
+        // saveFileDialog
         //
-        this.saveFileDialog1.DefaultExt = "txt";
-        this.saveFileDialog1.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+        this.saveFileDialog.DefaultExt = "txt";
+        this.saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
         //
-        // Form1
+        // NotepadForm
         //
         this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.ClientSize = new System.Drawing.Size(784, 561);
-        this.Controls.Add(this.mainTextBox);
+        this.Controls.Add(this.contentTextBox);
         this.Controls.Add(this.menuStrip1);
         this.MainMenuStrip = this.menuStrip1;
         this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2); // Use Margin consistent with project settings
-        this.Name = "Form1";
+        this.Name = "NotepadForm";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen; // Center the form
         this.Text = "Simple Notepad";
         this.menuStrip1.ResumeLayout(false);
@@ -218,7 +218,6 @@ partial class Form1
 
     #endregion
 
-    // --- Start of new field declarations ---
     private System.Windows.Forms.MenuStrip menuStrip1;
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -235,8 +234,7 @@ partial class Form1
     private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
-    private System.Windows.Forms.TextBox mainTextBox;
-    private System.Windows.Forms.OpenFileDialog openFileDialog1;
-    private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-    // --- End of new field declarations ---
+    private System.Windows.Forms.TextBox contentTextBox;
+    private System.Windows.Forms.OpenFileDialog openFileDialog;
+    private System.Windows.Forms.SaveFileDialog saveFileDialog;
 }

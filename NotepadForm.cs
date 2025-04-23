@@ -1,16 +1,43 @@
 using System.IO;
+using System.Reflection;
 
 namespace SimpleNotepad;
 
-public partial class Form1 : Form
+public partial class NotepadForm : Form
 {
     private string? currentFilePath = null;
     private bool isDirty = false;
     private const string DefaultFileName = "Untitled";
 
-    public Form1()
+    public NotepadForm()
     {
         InitializeComponent();
+
+        // Set the form's icon
+        try
+        {
+            // Assumes notepad.ico is in the same directory as the executable
+            string? assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (assemblyLocation != null)
+            {
+                string iconPath = Path.Combine(assemblyLocation, "notepad.ico");
+                if (File.Exists(iconPath))
+                {
+                    this.Icon = new Icon(iconPath);
+                }
+                else
+                {
+                    // Fallback or error handling if icon not found
+                    Console.WriteLine("Icon file not found at expected location: " + iconPath);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception if icon loading fails
+            Console.WriteLine("Error loading icon: " + ex.Message);
+        }
+
         this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
         this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
         this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
@@ -21,8 +48,8 @@ public partial class Form1 : Form
         this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
         this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
         this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
-        this.mainTextBox.TextChanged += new System.EventHandler(this.mainTextBox_TextChanged);
-        this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+        this.contentTextBox.TextChanged += new System.EventHandler(this.contentTextBox_TextChanged);
+        this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NotepadForm_FormClosing);
 
         UpdateTitle();
     }
@@ -33,7 +60,7 @@ public partial class Form1 : Form
         this.Text = $"{(isDirty ? "*" : "")}{fileName} - Simple Notepad";
     }
 
-    private void mainTextBox_TextChanged(object? sender, EventArgs e)
+    private void contentTextBox_TextChanged(object? sender, EventArgs e)
     {
         if (!isDirty)
         {
@@ -60,7 +87,7 @@ public partial class Form1 : Form
         {
             try
             {
-                File.WriteAllText(currentFilePath, mainTextBox.Text);
+                File.WriteAllText(currentFilePath, contentTextBox.Text);
                 isDirty = false;
                 UpdateTitle();
                 return true;
@@ -75,10 +102,10 @@ public partial class Form1 : Form
 
     private bool SaveFileAs()
     {
-        saveFileDialog1.FileName = currentFilePath ?? DefaultFileName + ".txt";
-        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+        saveFileDialog.FileName = currentFilePath ?? DefaultFileName + ".txt";
+        if (saveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            currentFilePath = saveFileDialog1.FileName;
+            currentFilePath = saveFileDialog.FileName;
             return SaveFile();
         }
         return false;
@@ -93,7 +120,7 @@ public partial class Form1 : Form
             if (!SaveFile()) return;
         }
 
-        mainTextBox.Clear();
+        contentTextBox.Clear();
         currentFilePath = null;
         isDirty = false;
         UpdateTitle();
@@ -108,12 +135,12 @@ public partial class Form1 : Form
             if (!SaveFile()) return;
         }
 
-        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
             try
             {
-                currentFilePath = openFileDialog1.FileName;
-                mainTextBox.Text = File.ReadAllText(currentFilePath);
+                currentFilePath = openFileDialog.FileName;
+                contentTextBox.Text = File.ReadAllText(currentFilePath);
                 isDirty = false;
                 UpdateTitle();
             }
@@ -121,7 +148,7 @@ public partial class Form1 : Form
             {
                 MessageBox.Show($"Error opening file:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 currentFilePath = null;
-                mainTextBox.Clear();
+                contentTextBox.Clear();
                 isDirty = false;
                 UpdateTitle();
             }
@@ -145,25 +172,25 @@ public partial class Form1 : Form
 
     private void undoToolStripMenuItem_Click(object? sender, EventArgs e)
     {
-        if (mainTextBox.CanUndo)
+        if (contentTextBox.CanUndo)
         {
-            mainTextBox.Undo();
+            contentTextBox.Undo();
         }
     }
 
     private void cutToolStripMenuItem_Click(object? sender, EventArgs e)
     {
-        if (mainTextBox.SelectionLength > 0)
+        if (contentTextBox.SelectionLength > 0)
         {
-            mainTextBox.Cut();
+            contentTextBox.Cut();
         }
     }
 
     private void copyToolStripMenuItem_Click(object? sender, EventArgs e)
     {
-        if (mainTextBox.SelectionLength > 0)
+        if (contentTextBox.SelectionLength > 0)
         {
-            mainTextBox.Copy();
+            contentTextBox.Copy();
         }
     }
 
@@ -171,16 +198,16 @@ public partial class Form1 : Form
     {
         if (Clipboard.ContainsText())
         {
-            mainTextBox.Paste();
+            contentTextBox.Paste();
         }
     }
 
     private void selectAllToolStripMenuItem_Click(object? sender, EventArgs e)
     {
-        mainTextBox.SelectAll();
+        contentTextBox.SelectAll();
     }
 
-    private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+    private void NotepadForm_FormClosing(object? sender, FormClosingEventArgs e)
     {
         DialogResult result = PromptToSave();
         if (result == DialogResult.Cancel)
